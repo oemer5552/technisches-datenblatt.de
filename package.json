@@ -1,0 +1,41 @@
+{
+  "name": "technisches-datenblatt-de",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.14.0",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "node scripts/migrate.mjs"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1085.0",
+    "@aws-sdk/s3-request-presigner": "^3.1085.0",
+    "drizzle-orm": "^0.45.2",
+    "jose": "^6.2.3",
+    "next": "16.2.10",
+    "postgres": "^3.4.9",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "stripe": "^22.3.1",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "drizzle-kit": "^0.31.10",
+    "eslint": "^9.0.0",
+    "eslint-config-next": "16.2.10",
+    "typescript": "^5.8.0",
+    "vitest": "^4.1.10"
+  }
+}

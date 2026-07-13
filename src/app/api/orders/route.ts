@@ -1,0 +1,63 @@
+import { randomUUID } from "node:crypto";
+import { getDb } from "@/db";
+import { documents, orderEvents, orders } from "@/db/schema";
+import { sameOrigin } from "@/lib/auth";
+import { extensionFor, validateDocument } from "@/lib/files";
+import { createAccessToken, hashToken, makeReference, safeFilename } from "@/lib/security";
+import { EVIDENCE_KINDS, MAX_UPLOAD_BYTES, SITE, type EvidenceKind } from "@/lib/site";
+import { deletePrivateObject, putPrivateObject } from "@/lib/storage";
+import { orderInputSchema } from "@/lib/validation";
+import { ZodError } from "zod";
+
+export const runtime = "nodejs";
+
+const uploadFields: Array<{ field: EvidenceKind; imagesOnly: boolean }> = [
+  { field: "foreignRegistrationDocument", imagesOnly: false },
+  { field: "vehiclePhoto", imagesOnly: true },
+  { field: "stampedVinPhoto", imagesOnly: true },
+];
+
+function text(form: FormData, name: string) { const value = form.get(name); return typeof value === "string" ? value : ""; }
+
+export async function POST(request: Request) {
+  if (!sameOrigin(request)) return Response.json({ error: "Ungültige Anfragequelle" }, { status: 403 });
+  const uploadedKeys: string[] = [];
+  try {
+    const form = await request.formData();
+    const input = orderInputSchema.parse({
+      locale: text(form, "locale") || "de", customerName: text(form, "customerName"), customerEmail: text(form, "customerEmail"), customerPhone: text(form, "customerPhone"), company: text(form, "company"), vin: text(form, "vin"), make: text(form, "make"), model: text(form, "model"), firstRegistration: text(form, "firstRegistration"), originCountry: text(form, "originCountry"), vinLocation: text(form, "vinLocation"), notes: text(form, "notes"), vinConfirmation: text(form, "vinConfirmation"), privacy: text(form, "privacy"), terms: text(form, "terms"), earlyPerformance: text(form, "earlyPerformance"), withdrawalAck: text(form, "withdrawalAck"),
+    });
+    const selected = uploadFields.map(({ field, imagesOnly }) => {
+      const file = form.get(field);
+      if (!(file instanceof File) || file.size === 0) throw new Error(`Pflichtdatei fehlt: ${EVIDENCE_KINDS[field]}`);
+      return { field, imagesOnly, file };
+    });
+    const totalSize = selected.reduce((sum, item) => sum + item.file.size, 0);
+    if (totalSize > MAX_UPLOAD_BYTES) throw new Error("Die Dateien dürfen zusammen höchstens 20 MB groß sein");
+
+    const id = randomUUID(); const accessToken = createAccessToken(); const reference = makeReference();
+    const documentRows: Array<typeof documents.$inferInsert> = [];
+    for (const item of selected) {
+      const buffer = Buffer.from(await item.file.arrayBuffer());
+      const validated = validateDocument(item.file, buffer, item.imagesOnly);
+      const objectKey = `orders/${id}/evidence/${item.field}/${randomUUID()}${extensionFor(validated.mediaType)}`;
+      await putPrivateObject(objectKey, buffer, validated.mediaType); uploadedKeys.push(objectKey);
+      documentRows.push({ id: randomUUID(), orderId: id, kind: item.field, originalName: safeFilename(item.file.name), objectKey, mediaType: validated.mediaType, size: buffer.length, sha256: validated.sha256 });
+    }
+
+    const now = new Date();
+    await getDb().transaction(async (tx) => {
+      await tx.insert(orders).values({ id, reference, accessTokenHash: hashToken(accessToken), locale: input.locale, customerName: input.customerName, customerEmail: input.customerEmail, customerPhone: input.customerPhone || null, company: input.company || null, vin: input.vin, make: input.make || null, model: input.model || null, firstRegistration: input.firstRegistration || null, originCountry: input.originCountry || null, vinLocation: input.vinLocation, notes: input.notes || null, priceCents: SITE.priceCents, currency: SITE.currency, consentData: { version: "2026-07-13", recordedAt: now.toISOString(), terms: true, privacyNotice: true, earlyPerformance: true, withdrawalAcknowledged: true, vinConfirmed: true } });
+      await tx.insert(documents).values(documentRows);
+      await tx.insert(orderEvents).values({ id: randomUUID(), orderId: id, actor: "customer", action: "order.created", detail: { locale: input.locale, evidenceKinds: uploadFields.map((item) => item.field) } });
+    });
+    return Response.json({ id, reference, accessToken }, { status: 201, headers: { "Cache-Control": "no-store" } });
+  } catch (reason) {
+    await Promise.allSettled(uploadedKeys.map(deletePrivateObject));
+    if (reason instanceof ZodError) return Response.json({ error: "Bitte prüfe die Pflichtfelder, die FIN und alle Erklärungen." }, { status: 400 });
+    if (reason instanceof Error && (/Pflichtdatei|Dateityp|Dateiendung|20 MB|Foto erforderlich|Dokumentenspeicher/.test(reason.message))) return Response.json({ error: reason.message }, { status: 400 });
+    console.error("order_create_failed", reason);
+    return Response.json({ error: "Der Auftrag konnte nicht gespeichert werden. Bitte versuche es später erneut." }, { status: 500 });
+  }
+}
+
