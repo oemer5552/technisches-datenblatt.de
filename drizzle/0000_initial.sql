@@ -34,6 +34,7 @@ CREATE INDEX IF NOT EXISTS "orders_email_idx" ON "orders" ("customer_email");
 -- Forward-compatible upgrade from the earlier portal prototype.
 ALTER TABLE "orders" ADD COLUMN IF NOT EXISTS "locale" text NOT NULL DEFAULT 'de';
 ALTER TABLE "orders" ADD COLUMN IF NOT EXISTS "vin_confirmed_by" text DEFAULT '';
+ALTER TABLE "orders" ALTER COLUMN "vin_location" DROP NOT NULL;
 ALTER TABLE "orders" ALTER COLUMN "service" SET DEFAULT 'data';
 ALTER TABLE "orders" ALTER COLUMN "price_cents" SET DEFAULT 2499;
 ALTER TABLE "orders" ALTER COLUMN "payment_status" SET DEFAULT 'pending';

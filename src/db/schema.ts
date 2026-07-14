@@ -21,7 +21,7 @@ export const orders = pgTable("orders", {
   model: text("model"),
   firstRegistration: text("first_registration"),
   originCountry: text("origin_country"),
-  vinLocation: text("vin_location").notNull(),
+  vinLocation: text("vin_location"),
   notes: text("notes"),
   vinPhysicallyChecked: boolean("vin_physically_checked").notNull().default(true),
   consentData: jsonb("consent_data").notNull().default({}),
