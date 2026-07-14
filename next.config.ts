@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   images: {
-    localPatterns: [{ pathname: "/beispiele/**", search: "?v=20260714-realistic" }],
+    localPatterns: [{ pathname: "/beispiele/**", search: "?v=20260714-reference-v2" }],
   },
   experimental: { proxyClientMaxBodySize: "25mb" },
   async headers() {
