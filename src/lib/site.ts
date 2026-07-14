@@ -48,6 +48,14 @@ export const RESULT_KINDS = {
   resultCocResearch: "COC-/Typdaten-Prüfergebnis",
 } as const;
 
+export const AI_RESULT_KINDS = {
+  aiDraftTechnicalData: "KI-Entwurf: Technisches Datenblatt",
+  aiDraftVinConfirmation: "KI-Entwurf: FIN-Abgleich",
+  aiDraftCocResearch: "KI-Entwurf: COC-/Typgenehmigungsdaten",
+} as const;
+
+export const DOWNLOAD_RESULT_KINDS = { ...RESULT_KINDS, ...AI_RESULT_KINDS } as const;
+
 export type EvidenceKind = keyof typeof EVIDENCE_KINDS;
 export type ResultKind = keyof typeof RESULT_KINDS;
 export const MAX_UPLOAD_BYTES = 20 * 1024 * 1024;

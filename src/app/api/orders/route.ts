@@ -8,6 +8,7 @@ import { createAccessToken, hashToken, makeReference, safeFilename } from "@/lib
 import { EVIDENCE_KINDS, MAX_UPLOAD_BYTES, SITE, getProduct, type EvidenceKind } from "@/lib/site";
 import { paymentsEnabled } from "@/lib/payments";
 import { sendOrderCreatedEmails } from "@/lib/mail";
+import { processOrderWithAi } from "@/lib/order-ai-processing";
 import { deletePrivateObject, putPrivateObject } from "@/lib/storage";
 import { orderInputSchema } from "@/lib/validation";
 import { ZodError } from "zod";
@@ -57,6 +58,7 @@ export async function POST(request: Request) {
       await tx.insert(orderEvents).values({ id: randomUUID(), orderId: id, actor: "customer", action: "order.created", detail: { locale: input.locale, service: input.service, priceCents: product.priceCents, originCountry: input.originCountry, evidenceKinds: uploadFields.map((item) => item.field) } });
     });
     after(async () => {
+      const processing = processOrderWithAi(id);
       const delivery = await sendOrderCreatedEmails({
         id,
         accessToken,
@@ -79,6 +81,7 @@ export async function POST(request: Request) {
       } catch (error) {
         console.error("order_mail_event_failed", { orderId: id, code: error instanceof Error ? error.name : "UNKNOWN" });
       }
+      await processing;
     });
     return Response.json({ id, reference, accessToken }, { status: 201, headers: { "Cache-Control": "no-store" } });
   } catch (reason) {

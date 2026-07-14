@@ -35,6 +35,13 @@ export async function deletePrivateObject(key: string) {
   await s3.client.send(new DeleteObjectCommand({ Bucket: s3.bucket, Key: key }));
 }
 
+export async function getPrivateObject(key: string) {
+  const s3 = storage();
+  const response = await s3.client.send(new GetObjectCommand({ Bucket: s3.bucket, Key: key }));
+  if (!response.Body) throw new Error("Dokument konnte nicht aus dem privaten Speicher gelesen werden");
+  return Buffer.from(await response.Body.transformToByteArray());
+}
+
 export async function signedPrivateUrl(key: string, filename: string, expiresIn = 180) {
   const s3 = storage();
   return getSignedUrl(s3.client, new GetObjectCommand({
@@ -43,4 +50,3 @@ export async function signedPrivateUrl(key: string, filename: string, expiresIn 
     ResponseContentDisposition: `attachment; filename="${filename.replace(/["\r\n]/g, "-")}"`,
   }), { expiresIn });
 }
-

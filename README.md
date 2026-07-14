@@ -11,6 +11,8 @@ Produktionsreifes Next.js-16-Portal der Autohaus Dörrschuck Handels GmbH für d
 - helles und dunkles Farbschema, responsive und barrierearm aufgebaut
 - Auftragsanlage mit serverseitiger Validierung von FIN, Pflichtfeldern und Einwilligungsnachweisen
 - Magic-Byte-Prüfung und private Ablage von PDF/JPG/PNG in einem Railway Bucket
+- automatische OCR-/Vision-Auslesung von Zulassungsdokument, Außenfoto und FIN-Foto mit strengem Fahrzeugdaten-Schema
+- Erkennung der sichtbaren Fahrzeuggrundfarbe, FIN-/Erstzulassungs-Abgleich und gekennzeichnete KI-PDF-Entwürfe im amtlichen Feldraster
 - geschützter Auftragsstatus mit gehashtem, zufälligem Zugriffscode
 - transaktionale Kundenbestätigung und interne Auftragsbenachrichtigung per SMTP
 - optionaler Stripe Checkout mit signaturgeprüftem Webhook; manueller Zahlungsmodus als Fallback
@@ -57,10 +59,13 @@ pnpm build
 | `SMTP_USER`, `SMTP_PASSWORD` | Zugangsdaten des Versandpostfachs |
 | `MAIL_FROM` | sichtbarer Absender der Auftragsmails |
 | `ORDER_NOTIFICATION_EMAIL` | Empfänger interner Auftragsbenachrichtigungen |
+| `OPENAI_API_KEY` | serverseitiger OpenAI-API-Schlüssel für OCR/Vision; niemals im Browser verwenden |
+| `OPENAI_VISION_MODEL` | Vision-Modell, standardmäßig `gpt-5.4-mini` |
+| `PYTHON_BIN` | Python-Laufzeit für die gebündelte, originalgetreue PDF-Engine |
 
 ## Daten- und Sicherheitsmodell
 
-Kundendokumente sind nie öffentliche Assets. Die Anwendung lädt sie serverseitig in den privaten Bucket und gibt sie nur nach Admin-Session oder korrektem Auftragszugriffscode über kurzlebige signierte URLs frei. Der vollständige Kundencode und das Admin-Passwort werden nicht gespeichert. Uploads werden anhand ihres Inhalts geprüft, Dateinamen bereinigt und alle Statusänderungen protokolliert.
+Kundendokumente sind nie öffentliche Assets. Die Anwendung lädt sie serverseitig in den privaten Bucket und gibt sie nur nach Admin-Session oder korrektem Auftragszugriffscode über kurzlebige signierte URLs frei. Der vollständige Kundencode und das Admin-Passwort werden nicht gespeichert. Uploads werden anhand ihres Inhalts geprüft, Dateinamen bereinigt und alle Statusänderungen protokolliert. OpenAI-Anfragen nutzen `store: false`; fehlende oder unsichere Daten werden nicht erfunden, sondern zur fachlichen Prüfung markiert. Automatische Ausgaben bleiben bis zur Prüfung sichtbar als KI-Entwurf gekennzeichnet.
 
 Das Backoffice wird sowohl auf Seiten- als auch API-Ebene abgesichert. Cookies sind `HttpOnly`, `SameSite=Strict` und in Produktion `Secure`. Loginversuche werden begrenzt. Mutierende Endpunkte prüfen zusätzlich den Origin.
 
