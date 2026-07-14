@@ -15,6 +15,5 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 export default async function LegalPage({ params }: { params: Promise<{ locale: string; legal: string }> }) {
   const { locale, legal } = await params; if (!isLocale(locale) || !(legal in legalTitles)) notFound(); const slug = legal as LegalSlug;
-  return <><SiteHeader locale={locale}/><main className="legal-page"><header><Link href={`/${locale}`}>← {locale === "de" ? "Zur Startseite" : "Back home"}</Link><span className="kicker">LEGAL / 2026</span><h1>{legalTitles[slug]}</h1><p>Stand: 13. Juli 2026</p></header><article className="legal-content"><LegalContent slug={slug} locale={locale}/></article></main><SiteFooter locale={locale}/></>;
+  return <><SiteHeader locale={locale}/><main className="legal-page"><header><Link href={`/${locale}`}>← {locale === "de" ? "Zur Startseite" : "Back home"}</Link><span className="kicker">LEGAL / 2026</span><h1>{legalTitles[slug]}</h1><p>Stand: 14. Juli 2026</p></header><article className="legal-content"><LegalContent slug={slug} locale={locale}/></article></main><SiteFooter locale={locale}/></>;
 }
-

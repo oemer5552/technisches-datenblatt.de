@@ -6,6 +6,7 @@ Produktionsreifes Next.js-16-Portal der Autohaus Dörrschuck Handels GmbH für t
 
 - deutsche und englische Marketing-, Wissens- und SEO-Seiten unter `/de/*` und `/en/*`
 - auswählbares 199-Euro-Zulassungspaket aus HU/AU durch TÜV Hessen, technischem Datenblatt und persönlicher Koordination
+- europaweite Datenblatt-Akzeptanzgarantie mit vollständiger Erstattung des gezahlten Paketpreises bei nachgewiesener Nichtakzeptanz
 - separates digitales Datenpaket sowie öffentliche, fiktive Muster für COC-/Typgenehmigungsdatenblatt, technisches Datenblatt und FIN-Bestätigung
 - helles und dunkles Farbschema, responsive und barrierearm aufgebaut
 - Auftragsanlage mit serverseitiger Validierung von FIN, Pflichtfeldern und Einwilligungsnachweisen

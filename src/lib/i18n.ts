@@ -14,9 +14,9 @@ export const copy = {
   de: {
     nav: { service: "Leistungen", process: "Ablauf", knowledge: "Wissen", status: "Auftragsstatus", order: "Auftrag starten", app: "Login" },
     hero: {
-      kicker: "Zulassungsservice für Deutschland und Europa",
-      titleA: "Grenzen wechseln.", titleB: "Einfach zulassen.",
-      text: "Für ausländische Fahrzeuge in Deutschland und deutsche Fahrzeuge im EU-Ausland: technische Daten, COC-/Typdaten und auf Wunsch HU/AU in einem koordinierten Ablauf.",
+      kicker: "Europaweite Datenblatt-Akzeptanzgarantie",
+      titleA: "Europaweit zulassen.", titleB: "Oder Geld zurück.",
+      text: "Wird unser technisches Datenblatt von der zuständigen Zulassungsstelle in Europa nicht als technischer Nachweis akzeptiert, erstatten wir den vollständigen gezahlten Paketpreis.",
       primary: "Paket auswählen", secondary: "So funktioniert es",
     },
     common: { locale: "Sprache", theme: "Darstellung", back: "Zurück", home: "Startseite" },
@@ -24,9 +24,9 @@ export const copy = {
   en: {
     nav: { service: "Services", process: "Process", knowledge: "Knowledge", status: "Order status", order: "Start order", app: "Login" },
     hero: {
-      kicker: "Registration support for Germany and Europe",
-      titleA: "Cross borders.", titleB: "Register smoothly.",
-      text: "For foreign vehicles in Germany and German vehicles in other EU countries: technical data, COC/type data and, where needed, HU/AU in one coordinated process.",
+      kicker: "Europe-wide data-sheet acceptance guarantee",
+      titleA: "Register across Europe.", titleB: "Or get your money back.",
+      text: "If the competent registration authority in Europe does not accept our technical data sheet as technical evidence, we refund the full package price paid.",
       primary: "Choose a package", secondary: "How it works",
     },
     common: { locale: "Language", theme: "Appearance", back: "Back", home: "Home" },

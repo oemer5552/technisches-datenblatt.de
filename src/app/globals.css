@@ -141,6 +141,7 @@ p { text-wrap: pretty; }
 .bundle-copy li { display: flex; align-items: center; gap: 10px; font-weight: 700; }
 .bundle-copy li svg { color: var(--acid); }
 .bundle-copy > small { display: block; max-width: 720px; color: #849991; line-height: 1.6; }
+.guarantee-link { display: inline-flex; align-items: center; gap: 10px; margin-top: 25px; padding-bottom: 5px; border-bottom: 1px solid var(--acid); color: var(--acid); font-size: 12px; font-weight: 800; }
 
 .process { display: grid; grid-template-columns: .85fr 1.15fr; gap: 8vw; padding: clamp(85px, 10vw, 150px) clamp(24px, 6vw, 105px); background: #10251f; color: #f0f5f2; }
 .process-intro { align-self: start; }
@@ -201,6 +202,11 @@ p { text-wrap: pretty; }
 .service-option > strong { font-size: 21px; letter-spacing: -.04em; white-space: nowrap; }
 .service-option > em { position: absolute; top: -8px; right: 12px; padding: 3px 7px; background: var(--brand); color: var(--bg); font: normal 8px "Cascadia Mono", Consolas, monospace; letter-spacing: .08em; text-transform: uppercase; }
 .service-hint { margin: 12px 0 0; padding: 12px 14px; border-left: 2px solid var(--brand); background: var(--surface-2); color: var(--muted); font-size: 11px; line-height: 1.55; }
+.guarantee-form-note { display: grid; grid-template-columns: auto 1fr; gap: 14px; margin-top: 28px; padding: 17px; border: 1px solid color-mix(in srgb, var(--brand) 55%, var(--line)); background: color-mix(in srgb, var(--brand) 8%, var(--surface)); }
+.guarantee-form-note > svg { color: var(--brand); }
+.guarantee-form-note b { font-size: 14px; }
+.guarantee-form-note p { margin: 5px 0 8px; color: var(--muted); font-size: 11px; line-height: 1.55; }
+.guarantee-form-note a { color: var(--brand); font-size: 11px; font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
 .form-grid .wide { grid-column: 1 / -1; }
 .order-form label, .admin-actions label { display: grid; gap: 7px; }
@@ -306,7 +312,7 @@ textarea { resize: vertical; }
 .legal-page { padding: 80px clamp(24px, 10vw, 170px) 120px; }
 .legal-page > header { max-width: 980px; margin-bottom: 60px; }
 .legal-page > header > a { display: block; margin-bottom: 55px; color: var(--muted); font-size: 12px; }
-.legal-page h1 { margin: 20px 0; font-size: clamp(50px, 7vw, 94px); line-height: .92; letter-spacing: -.07em; }
+.legal-page h1 { margin: 20px 0; font-size: clamp(50px, 7vw, 94px); line-height: .92; letter-spacing: -.07em; overflow-wrap: anywhere; }
 .legal-page > header > p { color: var(--muted); font: 11px "Cascadia Mono", Consolas, monospace; }
 .legal-content { max-width: 900px; padding: clamp(26px, 5vw, 65px); border: 1px solid var(--line); background: var(--surface); }
 .legal-content section { padding: 13px 0 22px; }
