@@ -4,7 +4,7 @@ import { documents, orderEvents, orders } from "@/db/schema";
 import { sameOrigin } from "@/lib/auth";
 import { extensionFor, validateDocument } from "@/lib/files";
 import { createAccessToken, hashToken, makeReference, safeFilename } from "@/lib/security";
-import { EVIDENCE_KINDS, MAX_UPLOAD_BYTES, SITE, type EvidenceKind } from "@/lib/site";
+import { EVIDENCE_KINDS, MAX_UPLOAD_BYTES, SITE, getProduct, type EvidenceKind } from "@/lib/site";
 import { deletePrivateObject, putPrivateObject } from "@/lib/storage";
 import { orderInputSchema } from "@/lib/validation";
 import { ZodError } from "zod";
@@ -25,8 +25,9 @@ export async function POST(request: Request) {
   try {
     const form = await request.formData();
     const input = orderInputSchema.parse({
-      locale: text(form, "locale") || "de", customerName: text(form, "customerName"), customerEmail: text(form, "customerEmail"), customerPhone: text(form, "customerPhone"), company: text(form, "company"), vin: text(form, "vin"), make: text(form, "make"), model: text(form, "model"), firstRegistration: text(form, "firstRegistration"), originCountry: text(form, "originCountry"), vinLocation: text(form, "vinLocation"), notes: text(form, "notes"), vinConfirmation: text(form, "vinConfirmation"), privacy: text(form, "privacy"), terms: text(form, "terms"), earlyPerformance: text(form, "earlyPerformance"), withdrawalAck: text(form, "withdrawalAck"),
+      locale: text(form, "locale") || "de", service: text(form, "service") || "registration", customerName: text(form, "customerName"), customerEmail: text(form, "customerEmail"), customerPhone: text(form, "customerPhone"), company: text(form, "company"), vin: text(form, "vin"), make: text(form, "make"), model: text(form, "model"), firstRegistration: text(form, "firstRegistration"), originCountry: text(form, "originCountry"), vinLocation: text(form, "vinLocation"), notes: text(form, "notes"), vinConfirmation: text(form, "vinConfirmation"), privacy: text(form, "privacy"), terms: text(form, "terms"), earlyPerformance: text(form, "earlyPerformance"), withdrawalAck: text(form, "withdrawalAck"),
     });
+    const product = getProduct(input.service);
     const selected = uploadFields.map(({ field, imagesOnly }) => {
       const file = form.get(field);
       if (!(file instanceof File) || file.size === 0) throw new Error(`Pflichtdatei fehlt: ${EVIDENCE_KINDS[field]}`);
@@ -47,9 +48,9 @@ export async function POST(request: Request) {
 
     const now = new Date();
     await getDb().transaction(async (tx) => {
-      await tx.insert(orders).values({ id, reference, accessTokenHash: hashToken(accessToken), locale: input.locale, customerName: input.customerName, customerEmail: input.customerEmail, customerPhone: input.customerPhone || null, company: input.company || null, vin: input.vin, make: input.make || null, model: input.model || null, firstRegistration: input.firstRegistration || null, originCountry: input.originCountry || null, vinLocation: input.vinLocation, notes: input.notes || null, priceCents: SITE.priceCents, currency: SITE.currency, consentData: { version: "2026-07-13", recordedAt: now.toISOString(), terms: true, privacyNotice: true, earlyPerformance: true, withdrawalAcknowledged: true, vinConfirmed: true } });
+      await tx.insert(orders).values({ id, reference, accessTokenHash: hashToken(accessToken), locale: input.locale, service: input.service, customerName: input.customerName, customerEmail: input.customerEmail, customerPhone: input.customerPhone || null, company: input.company || null, vin: input.vin, make: input.make || null, model: input.model || null, firstRegistration: input.firstRegistration || null, originCountry: input.originCountry || null, vinLocation: input.vinLocation, notes: input.notes || null, priceCents: product.priceCents, currency: SITE.currency, consentData: { version: "2026-07-13.1", recordedAt: now.toISOString(), service: input.service, priceCents: product.priceCents, terms: true, privacyNotice: true, earlyPerformance: true, withdrawalAcknowledged: true, vinConfirmed: true } });
       await tx.insert(documents).values(documentRows);
-      await tx.insert(orderEvents).values({ id: randomUUID(), orderId: id, actor: "customer", action: "order.created", detail: { locale: input.locale, evidenceKinds: uploadFields.map((item) => item.field) } });
+      await tx.insert(orderEvents).values({ id: randomUUID(), orderId: id, actor: "customer", action: "order.created", detail: { locale: input.locale, service: input.service, priceCents: product.priceCents, evidenceKinds: uploadFields.map((item) => item.field) } });
     });
     return Response.json({ id, reference, accessToken }, { status: 201, headers: { "Cache-Control": "no-store" } });
   } catch (reason) {
@@ -60,4 +61,3 @@ export async function POST(request: Request) {
     return Response.json({ error: "Der Auftrag konnte nicht gespeichert werden. Bitte versuche es später erneut." }, { status: 500 });
   }
 }
-

@@ -4,10 +4,33 @@ export const SITE = {
   address: "Marienborner Straße 49, 55128 Mainz, Deutschland",
   email: "info@autohaus-doerrschuck.de",
   phone: "+49 (0) 6131 934070",
-  priceCents: 2499,
-  price: "24,99 €",
   currency: "eur",
 } as const;
+
+export const PRODUCTS = {
+  data: {
+    id: "data",
+    name: "Digitales Datenpaket",
+    nameEn: "Digital data package",
+    priceCents: 2499,
+    price: "24,99 €",
+    stripeDescription: "Technisches Datenblatt, FIN-Erklärung und COC-/Typdaten-Prüfergebnis",
+  },
+  registration: {
+    id: "registration",
+    name: "Zulassungspaket HU/AU + Datenblatt",
+    nameEn: "Registration package: roadworthiness/emissions test + data sheet",
+    priceCents: 19900,
+    price: "199,00 €",
+    stripeDescription: "HU/AU durch TÜV Hessen, technisches Datenblatt und persönliche Koordination",
+  },
+} as const;
+
+export type ProductId = keyof typeof PRODUCTS;
+
+export function getProduct(id: string) {
+  return id === "data" ? PRODUCTS.data : PRODUCTS.registration;
+}
 
 export const ORDER_STATUSES = [
   "eingegangen",
@@ -35,4 +58,3 @@ export const RESULT_KINDS = {
 export type EvidenceKind = keyof typeof EVIDENCE_KINDS;
 export type ResultKind = keyof typeof RESULT_KINDS;
 export const MAX_UPLOAD_BYTES = 20 * 1024 * 1024;
-

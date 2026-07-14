@@ -1,10 +1,12 @@
 # technisches-datenblatt.de
 
-Produktionsreifes Next.js-16-Portal der Autohaus Dörrschuck Handels GmbH für die sichere Beauftragung technischer Fahrzeugdaten-Dienstleistungen.
+Produktionsreifes Next.js-16-Portal der Autohaus Dörrschuck Handels GmbH für technische Fahrzeugdaten und einen koordinierten Zulassungsablauf zwischen Deutschland und dem EU-Ausland.
 
 ## Funktionsumfang
 
 - deutsche und englische Marketing-, Wissens- und SEO-Seiten unter `/de/*` und `/en/*`
+- auswählbares 199-Euro-Zulassungspaket aus HU/AU durch TÜV Hessen, technischem Datenblatt und persönlicher Koordination
+- separates digitales Datenpaket sowie öffentliche, fiktive Muster für COC-/Typgenehmigungsdatenblatt, technisches Datenblatt und FIN-Bestätigung
 - helles und dunkles Farbschema, responsive und barrierearm aufgebaut
 - Auftragsanlage mit serverseitiger Validierung von FIN, Pflichtfeldern und Einwilligungsnachweisen
 - Magic-Byte-Prüfung und private Ablage von PDF/JPG/PNG in einem Railway Bucket
@@ -61,4 +63,3 @@ Das Backoffice wird sowohl auf Seiten- als auch API-Ebene abgesichert. Cookies s
 `railway.toml` baut die Standalone-Anwendung, führt vor dem Start Drizzle-Migrationen aus und prüft `/api/health`. Empfohlen ist die EU-West-Region Amsterdam für Web, PostgreSQL und Bucket. Die Railway-Domain kann später ohne Codeänderung durch `technisches-datenblatt.de` ersetzt werden; anschließend muss `PUBLIC_BASE_URL` angepasst werden.
 
 > Rechtlicher Hinweis: Die mitgelieferten Rechtstexte sind auf den derzeit umgesetzten Datenfluss zugeschnitten. Vor Aufnahme des Live-Geschäftsbetriebs sollten Preis, Zahlungsart, Löschfristen und Texte anwaltlich geprüft und bei Prozessänderungen aktualisiert werden.
-

@@ -5,12 +5,12 @@ export const orders = pgTable("orders", {
   reference: text("reference").notNull(),
   accessTokenHash: text("access_token_hash").notNull(),
   locale: text("locale").notNull().default("de"),
-  service: text("service").notNull().default("complete"),
+  service: text("service").notNull().default("registration"),
   status: text("status").notNull().default("eingegangen"),
   paymentStatus: text("payment_status").notNull().default("pending"),
   paymentProvider: text("payment_provider"),
   paymentReference: text("payment_reference"),
-  priceCents: integer("price_cents").notNull().default(2499),
+  priceCents: integer("price_cents").notNull().default(19900),
   currency: text("currency").notNull().default("eur"),
   customerName: text("customer_name").notNull(),
   customerEmail: text("customer_email").notNull(),
@@ -54,4 +54,3 @@ export const orderEvents = pgTable("order_events", {
   detail: jsonb("detail").notNull().default({}),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 }, (table) => [index("order_events_order_idx").on(table.orderId, table.createdAt)]);
-

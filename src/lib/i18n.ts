@@ -14,22 +14,21 @@ export const copy = {
   de: {
     nav: { service: "Leistungen", process: "Ablauf", knowledge: "Wissen", status: "Auftragsstatus", order: "Auftrag starten", app: "Login" },
     hero: {
-      kicker: "Digitaler Dokumentenservice für Importfahrzeuge",
-      titleA: "Fahrzeugdaten.", titleB: "Klar dokumentiert.",
-      text: "Unterlagen sicher einreichen, Fahrzeug- und Typdaten fachlich prüfen lassen und digitale Ergebnisdokumente zentral abrufen.",
-      primary: "Auftrag starten", secondary: "So funktioniert es",
+      kicker: "Zulassungsservice für Deutschland und Europa",
+      titleA: "Grenzen wechseln.", titleB: "Einfach zulassen.",
+      text: "Für ausländische Fahrzeuge in Deutschland und deutsche Fahrzeuge im EU-Ausland: technische Daten, COC-/Typdaten und auf Wunsch HU/AU in einem koordinierten Ablauf.",
+      primary: "Paket auswählen", secondary: "So funktioniert es",
     },
     common: { locale: "Sprache", theme: "Darstellung", back: "Zurück", home: "Startseite" },
   },
   en: {
     nav: { service: "Services", process: "Process", knowledge: "Knowledge", status: "Order status", order: "Start order", app: "Login" },
     hero: {
-      kicker: "Digital document service for imported vehicles",
-      titleA: "Vehicle data.", titleB: "Clearly documented.",
-      text: "Submit documents securely, have vehicle and type data reviewed, and retrieve the digital results in one place.",
-      primary: "Start order", secondary: "How it works",
+      kicker: "Registration support for Germany and Europe",
+      titleA: "Cross borders.", titleB: "Register smoothly.",
+      text: "For foreign vehicles in Germany and German vehicles in other EU countries: technical data, COC/type data and, where needed, HU/AU in one coordinated process.",
+      primary: "Choose a package", secondary: "How it works",
     },
     common: { locale: "Language", theme: "Appearance", back: "Back", home: "Home" },
   },
 } as const;
-
