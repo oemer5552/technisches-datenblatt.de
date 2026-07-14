@@ -26,8 +26,7 @@ export function SiteHeader({ locale }: { locale: Locale }) {
       <button className="icon-button menu-button" onClick={() => setOpen(!open)} aria-expanded={open} aria-label="Menü"><Icon name="menu" /></button>
       <nav className={open ? "open" : ""} aria-label="Hauptnavigation">
         <Link href={`/${locale}#leistung`} onClick={() => setOpen(false)}>{t.nav.service}</Link>
-        <Link href={`/${locale}#ablauf`} onClick={() => setOpen(false)}>{t.nav.process}</Link>
-        <Link href={`/${locale}#wissen`} onClick={() => setOpen(false)}>{t.nav.knowledge}</Link>
+        <Link href={`/${locale}#beispiele`} onClick={() => setOpen(false)}>{locale === "de" ? "Muster" : "Samples"}</Link>
         <Link href={`/${locale}/status`} onClick={() => setOpen(false)}>{t.nav.status}</Link>
         <Link className="nav-login" href={`/${locale}/app`}>{t.nav.app}</Link>
         <Link className="locale-link" href={otherPath} hrefLang={other}>{other.toUpperCase()}</Link>

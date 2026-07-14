@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { EUROPEAN_COUNTRY_CODES } from "./european-countries";
+import { EU_COUNTRY_CODES } from "./eu-countries";
 import { normalizeVin } from "./security";
 
 const accepted = z.literal("accepted");
@@ -13,7 +13,7 @@ export const orderInputSchema = z.object({
   company: z.string().trim().max(120).optional().default(""),
   vin: z.string().transform(normalizeVin).pipe(z.string().length(17)),
   firstRegistration: z.iso.date(),
-  originCountry: z.enum(EUROPEAN_COUNTRY_CODES),
+  originCountry: z.enum(EU_COUNTRY_CODES),
   notes: z.string().trim().max(2000).optional().default(""),
   vinConfirmation: accepted,
   privacy: accepted,

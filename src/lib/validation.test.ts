@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { EUROPEAN_COUNTRIES, formatEuropeanCountry } from "./european-countries";
+import { EU_COUNTRIES, formatEuCountry } from "./eu-countries";
 import { orderInputSchema } from "./validation";
 
 const validOrder = {
@@ -37,23 +37,25 @@ describe("order input", () => {
     expect(orderInputSchema.safeParse({ ...validOrder, firstRegistration: "" }).success).toBe(false);
   });
 
-  it("only accepts a listed European country", () => {
+  it("only accepts a current EU Member State", () => {
     expect(orderInputSchema.safeParse({ ...validOrder, originCountry: "US" }).success).toBe(false);
   });
 });
 
-describe("European country options", () => {
-  it("contains unique country codes and localized names", () => {
-    const codes = EUROPEAN_COUNTRIES.map(({ code }) => code);
+describe("EU country options", () => {
+  it("contains exactly the 27 unique EU Member States", () => {
+    const codes = EU_COUNTRIES.map(({ code }) => code);
 
+    expect(codes).toHaveLength(27);
     expect(new Set(codes).size).toBe(codes.length);
-    expect(codes).toEqual(expect.arrayContaining(["DE", "FR", "GB", "TR", "UA", "XK"]));
-    expect(formatEuropeanCountry("IT", "de")).toBe("Italien");
-    expect(formatEuropeanCountry("IT", "en")).toBe("Italy");
+    expect(codes).toEqual(expect.arrayContaining(["DE", "FR", "IT", "PL", "SE", "CY"]));
+    for (const code of ["GB", "TR", "UA", "CH"]) expect(codes).not.toContain(code);
+    expect(formatEuCountry("IT", "de")).toBe("Italien");
+    expect(formatEuCountry("IT", "en")).toBe("Italy");
   });
 
   it("keeps legacy country names readable in the backoffice", () => {
-    expect(formatEuropeanCountry("Frankreich", "de")).toBe("Frankreich");
-    expect(formatEuropeanCountry(null, "de")).toBe("—");
+    expect(formatEuCountry("Frankreich", "de")).toBe("Frankreich");
+    expect(formatEuCountry(null, "de")).toBe("—");
   });
 });

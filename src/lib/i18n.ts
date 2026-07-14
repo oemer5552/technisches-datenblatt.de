@@ -16,7 +16,7 @@ export const copy = {
     hero: {
       kicker: "Ein digitales Produkt für Fahrzeugdaten",
       titleA: "Drei Dokumente.", titleB: "Ein klarer Preis.",
-      text: "COC-/Typgenehmigungsdaten, technisches Datenblatt und FIN-Bestätigung für 24,99 € inkl. MwSt. - mit europaweiter Datenblatt-Akzeptanzgarantie.",
+      text: "COC-/Typgenehmigungsdaten, technisches Datenblatt und FIN-Bestätigung für 24,99 € inkl. MwSt. – mit Akzeptanzgarantie in der Europäischen Union.",
       primary: "Für 24,99 € bestellen", secondary: "So funktioniert es",
     },
     common: { locale: "Sprache", theme: "Darstellung", back: "Zurück", home: "Startseite" },
@@ -26,7 +26,7 @@ export const copy = {
     hero: {
       kicker: "One digital vehicle-data product",
       titleA: "Three documents.", titleB: "One clear price.",
-      text: "COC/type-approval data, technical data sheet and VIN confirmation for €24.99 incl. VAT - with our Europe-wide data-sheet acceptance guarantee.",
+      text: "COC/type-approval data, technical data sheet and VIN confirmation for €24.99 incl. VAT – with our European Union acceptance guarantee.",
       primary: "Order for €24.99", secondary: "How it works",
     },
     common: { locale: "Language", theme: "Appearance", back: "Back", home: "Home" },
