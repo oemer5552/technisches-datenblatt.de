@@ -1,9 +1,9 @@
-import { randomUUID } from "node:crypto";
 import { eq } from "drizzle-orm";
 import Stripe from "stripe";
 import { getDb } from "@/db";
-import { orderEvents, orders } from "@/db/schema";
+import { orders } from "@/db/schema";
 import { sameOrigin } from "@/lib/auth";
+import { paymentsEnabled } from "@/lib/payments";
 import { tokenMatches } from "@/lib/security";
 import { SITE, getProduct } from "@/lib/site";
 
@@ -19,15 +19,10 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
   const statusUrl = `${baseUrl}/${locale}/status?id=${id}&token=${encodeURIComponent(token)}`;
   if (order.paymentStatus === "paid") return Response.json({ checkoutUrl: statusUrl });
 
-  if (process.env.PAYMENT_MODE !== "stripe" || !process.env.STRIPE_SECRET_KEY) {
-    await getDb().transaction(async (tx) => {
-      await tx.update(orders).set({ status: "zahlung_offen", paymentProvider: "manual", updatedAt: new Date() }).where(eq(orders.id, id));
-      await tx.insert(orderEvents).values({ id: randomUUID(), orderId: id, actor: "system", action: "payment.manual_selected", detail: {} });
-    });
-    return Response.json({ checkoutUrl: statusUrl, paymentMode: "manual" });
-  }
+  const stripeSecretKey = process.env.STRIPE_SECRET_KEY;
+  if (!paymentsEnabled() || !stripeSecretKey) return Response.json({ checkoutUrl: statusUrl, paymentMode: "test" });
 
-  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+  const stripe = new Stripe(stripeSecretKey);
   const product = getProduct(order.service);
   const session = await stripe.checkout.sessions.create({
     mode: "payment", locale: locale === "de" ? "de" : "en", client_reference_id: id, customer_email: order.customerEmail,
