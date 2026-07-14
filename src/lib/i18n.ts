@@ -14,20 +14,20 @@ export const copy = {
   de: {
     nav: { service: "Leistungen", process: "Ablauf", knowledge: "Wissen", status: "Auftragsstatus", order: "Auftrag starten", app: "Login" },
     hero: {
-      kicker: "Europaweite Datenblatt-Akzeptanzgarantie",
-      titleA: "Europaweit zulassen.", titleB: "Oder Geld zurück.",
-      text: "Wird unser technisches Datenblatt von der zuständigen Zulassungsstelle in Europa nicht als technischer Nachweis akzeptiert, erstatten wir den vollständigen gezahlten Paketpreis.",
-      primary: "Paket auswählen", secondary: "So funktioniert es",
+      kicker: "Ein digitales Produkt für Fahrzeugdaten",
+      titleA: "Drei Dokumente.", titleB: "Ein klarer Preis.",
+      text: "COC-/Typgenehmigungsdaten, technisches Datenblatt und FIN-Bestätigung für 24,99 € inkl. MwSt. - mit europaweiter Datenblatt-Akzeptanzgarantie.",
+      primary: "Für 24,99 € bestellen", secondary: "So funktioniert es",
     },
     common: { locale: "Sprache", theme: "Darstellung", back: "Zurück", home: "Startseite" },
   },
   en: {
     nav: { service: "Services", process: "Process", knowledge: "Knowledge", status: "Order status", order: "Start order", app: "Login" },
     hero: {
-      kicker: "Europe-wide data-sheet acceptance guarantee",
-      titleA: "Register across Europe.", titleB: "Or get your money back.",
-      text: "If the competent registration authority in Europe does not accept our technical data sheet as technical evidence, we refund the full package price paid.",
-      primary: "Choose a package", secondary: "How it works",
+      kicker: "One digital vehicle-data product",
+      titleA: "Three documents.", titleB: "One clear price.",
+      text: "COC/type-approval data, technical data sheet and VIN confirmation for €24.99 incl. VAT - with our Europe-wide data-sheet acceptance guarantee.",
+      primary: "Order for €24.99", secondary: "How it works",
     },
     common: { locale: "Language", theme: "Appearance", back: "Back", home: "Home" },
   },

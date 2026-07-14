@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS "orders" (
   "reference" text NOT NULL,
   "access_token_hash" text NOT NULL,
   "locale" text NOT NULL DEFAULT 'de',
-  "service" text NOT NULL DEFAULT 'complete',
+  "service" text NOT NULL DEFAULT 'data',
   "status" text NOT NULL DEFAULT 'eingegangen',
   "payment_status" text NOT NULL DEFAULT 'pending',
   "payment_provider" text,
@@ -34,7 +34,8 @@ CREATE INDEX IF NOT EXISTS "orders_email_idx" ON "orders" ("customer_email");
 -- Forward-compatible upgrade from the earlier portal prototype.
 ALTER TABLE "orders" ADD COLUMN IF NOT EXISTS "locale" text NOT NULL DEFAULT 'de';
 ALTER TABLE "orders" ADD COLUMN IF NOT EXISTS "vin_confirmed_by" text DEFAULT '';
-ALTER TABLE "orders" ALTER COLUMN "service" SET DEFAULT 'complete';
+ALTER TABLE "orders" ALTER COLUMN "service" SET DEFAULT 'data';
+ALTER TABLE "orders" ALTER COLUMN "price_cents" SET DEFAULT 2499;
 ALTER TABLE "orders" ALTER COLUMN "payment_status" SET DEFAULT 'pending';
 ALTER TABLE "orders" ALTER COLUMN "vin_confirmed_by" SET DEFAULT '';
 UPDATE "orders" SET "payment_status" = 'pending' WHERE "payment_status" = 'unpaid';

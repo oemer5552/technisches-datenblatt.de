@@ -10,26 +10,19 @@ export const SITE = {
 export const PRODUCTS = {
   data: {
     id: "data",
-    name: "Digitales Datenpaket",
-    nameEn: "Digital data package",
+    name: "Digitales Fahrzeugdatenpaket",
+    nameEn: "Digital vehicle data package",
     priceCents: 2499,
     price: "24,99 €",
-    stripeDescription: "Technisches Datenblatt, FIN-Erklärung und COC-/Typdaten-Prüfergebnis",
-  },
-  registration: {
-    id: "registration",
-    name: "Zulassungspaket HU/AU + Datenblatt",
-    nameEn: "Registration package: roadworthiness/emissions test + data sheet",
-    priceCents: 19900,
-    price: "199,00 €",
-    stripeDescription: "HU/AU durch TÜV Hessen, technisches Datenblatt und persönliche Koordination",
+    stripeDescription: "COC-/Typgenehmigungsdaten, technisches Datenblatt und FIN-Bestätigung",
   },
 } as const;
 
 export type ProductId = keyof typeof PRODUCTS;
 
 export function getProduct(id: string) {
-  return id === "data" ? PRODUCTS.data : PRODUCTS.registration;
+  void id;
+  return PRODUCTS.data;
 }
 
 export const ORDER_STATUSES = [
@@ -51,7 +44,7 @@ export const EVIDENCE_KINDS = {
 
 export const RESULT_KINDS = {
   resultTechnicalData: "Technisches Datenblatt",
-  resultVinConfirmation: "FIN-Erklärung",
+  resultVinConfirmation: "FIN-Bestätigung",
   resultCocResearch: "COC-/Typdaten-Prüfergebnis",
 } as const;
 

@@ -1,13 +1,13 @@
 # technisches-datenblatt.de
 
-Produktionsreifes Next.js-16-Portal der Autohaus Dörrschuck Handels GmbH für technische Fahrzeugdaten und einen koordinierten Zulassungsablauf zwischen Deutschland und dem EU-Ausland.
+Produktionsreifes Next.js-16-Portal der Autohaus Dörrschuck Handels GmbH für digital aufbereitete Fahrzeugdaten bei Zulassungsvorgängen innerhalb Europas.
 
 ## Funktionsumfang
 
 - deutsche und englische Marketing-, Wissens- und SEO-Seiten unter `/de/*` und `/en/*`
-- auswählbares 199-Euro-Zulassungspaket aus HU/AU durch TÜV Hessen, technischem Datenblatt und persönlicher Koordination
+- ein einziges digitales Fahrzeugdatenpaket für 24,99 Euro inkl. MwSt. aus COC-/Typgenehmigungsdaten, technischem Datenblatt und FIN-Bestätigung
 - europaweite Datenblatt-Akzeptanzgarantie mit vollständiger Erstattung des gezahlten Paketpreises bei nachgewiesener Nichtakzeptanz
-- separates digitales Datenpaket sowie öffentliche, fiktive Muster für COC-/Typgenehmigungsdatenblatt, technisches Datenblatt und FIN-Bestätigung
+- öffentliche, fiktive und dauerhaft gekennzeichnete Muster für COC-/Typgenehmigungsdatenblatt, technisches Datenblatt und FIN-Bestätigung
 - helles und dunkles Farbschema, responsive und barrierearm aufgebaut
 - Auftragsanlage mit serverseitiger Validierung von FIN, Pflichtfeldern und Einwilligungsnachweisen
 - Magic-Byte-Prüfung und private Ablage von PDF/JPG/PNG in einem Railway Bucket

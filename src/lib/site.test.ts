@@ -2,18 +2,14 @@ import { describe, expect, it } from "vitest";
 import { PRODUCTS, getProduct } from "./site";
 
 describe("service pricing", () => {
-  it("uses the advertised 199 euro gross price for the registration package", () => {
-    expect(getProduct("registration")).toBe(PRODUCTS.registration);
-    expect(PRODUCTS.registration.priceCents).toBe(19_900);
-    expect(PRODUCTS.registration.price).toBe("199,00 €");
-  });
-
-  it("keeps the separate digital data package at 24.99 euros", () => {
+  it("offers exactly one digital package at 24.99 euros gross", () => {
+    expect(Object.keys(PRODUCTS)).toEqual(["data"]);
     expect(getProduct("data")).toBe(PRODUCTS.data);
     expect(PRODUCTS.data.priceCents).toBe(2_499);
+    expect(PRODUCTS.data.price).toBe("24,99 €");
   });
 
-  it("falls back safely to the registration package for unknown legacy values", () => {
-    expect(getProduct("complete")).toBe(PRODUCTS.registration);
+  it("maps unknown legacy values safely to the only current product", () => {
+    expect(getProduct("registration")).toBe(PRODUCTS.data);
   });
 });

@@ -2,6 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  images: {
+    localPatterns: [{ pathname: "/beispiele/**", search: "?v=20260714-realistic" }],
+  },
   experimental: { proxyClientMaxBodySize: "25mb" },
   async headers() {
     return [

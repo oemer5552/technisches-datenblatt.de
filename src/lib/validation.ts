@@ -5,7 +5,7 @@ const accepted = z.literal("accepted");
 
 export const orderInputSchema = z.object({
   locale: z.enum(["de", "en"]).default("de"),
-  service: z.enum(["data", "registration"]).default("registration"),
+  service: z.literal("data").default("data"),
   customerName: z.string().trim().min(2).max(120),
   customerEmail: z.email().toLowerCase(),
   customerPhone: z.string().trim().max(50).optional().default(""),

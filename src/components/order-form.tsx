@@ -3,18 +3,17 @@
 import Link from "next/link";
 import { useState } from "react";
 import type { Locale } from "@/lib/i18n";
-import { PRODUCTS, type ProductId } from "@/lib/site";
+import { PRODUCTS } from "@/lib/site";
 import { Icon } from "./icons";
 
 type Created = { id: string; reference: string; accessToken: string };
 
 export function OrderForm({ locale }: { locale: Locale }) {
   const de = locale === "de";
-  const [service, setService] = useState<ProductId>("registration");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [created, setCreated] = useState<Created | null>(null);
-  const product = PRODUCTS[service];
+  const product = PRODUCTS.data;
 
   async function submit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault(); setBusy(true); setError("");
@@ -33,17 +32,13 @@ export function OrderForm({ locale }: { locale: Locale }) {
   }
 
   return <form className="order-form" onSubmit={submit} encType="multipart/form-data">
+    <input type="hidden" name="service" value="data"/>
     <div className="form-head"><div><span>{de ? "Sicheres Auftragsformular" : "Secure order form"}</span><h3>{de ? "Leistung und Fahrzeug" : "Service and vehicle"}</h3></div><Icon name="shield" size={32}/></div>
-    <fieldset disabled={busy}><legend><span>01</span>{de ? "Leistung wählen" : "Choose a service"}</legend><div className="service-options">
-      <label className={service === "registration" ? "service-option selected" : "service-option"}>
-        <input type="radio" name="service" value="registration" checked={service === "registration"} onChange={() => setService("registration")}/>
-        <span><b>{de ? "Zulassungspaket" : "Registration package"}</b><small>{de ? "HU/AU durch TÜV Hessen + Datenblatt + Akzeptanzgarantie" : "HU/AU by TÜV Hessen + data sheet + acceptance guarantee"}</small></span><strong>{PRODUCTS.registration.price}</strong><em>{de ? "Empfohlen" : "Recommended"}</em>
-      </label>
-      <label className={service === "data" ? "service-option selected" : "service-option"}>
-        <input type="radio" name="service" value="data" checked={service === "data"} onChange={() => setService("data")}/>
-        <span><b>{de ? "Digitales Datenpaket" : "Digital data package"}</b><small>{de ? "Datenblatt, FIN-Erklärung, Typdaten-Prüfung + Akzeptanzgarantie" : "Data sheet, VIN declaration, type-data review + acceptance guarantee"}</small></span><strong>{PRODUCTS.data.price}</strong>
-      </label>
-    </div>{service === "registration" && <p className="service-hint">{de ? "Für HU/AU ist ein Termin mit Fahrzeugvorführung erforderlich. Wir stimmen ihn nach der Unterlagenprüfung persönlich mit dir ab." : "A vehicle appointment is required for the roadworthiness and emissions test. We arrange it with you after reviewing the documents."}</p>}</fieldset>
+    <fieldset disabled={busy}><legend><span>01</span>{de ? "Produkt" : "Product"}</legend><div className="service-options">
+      <div className="service-option selected single-product">
+        <Icon name="file" size={20}/><span><b>{de ? "Digitales Fahrzeugdatenpaket" : "Digital vehicle data package"}</b><small>{de ? "COC-/Typgenehmigungsdaten + technisches Datenblatt + FIN-Bestätigung" : "COC/type-approval data + technical data sheet + VIN confirmation"}</small></span><strong>{PRODUCTS.data.price}</strong>
+      </div>
+    </div><p className="service-hint">{de ? "Einmaliger Endpreis inkl. gesetzlicher MwSt. Die Dokumente werden nach Prüfung deiner Fahrzeugunterlagen digital bereitgestellt." : "One-off total price incl. VAT. The documents are provided digitally after your vehicle records have been reviewed."}</p></fieldset>
     <fieldset disabled={busy}><legend><span>02</span>{de ? "Kontaktdaten" : "Contact details"}</legend><div className="form-grid"><label><span>{de ? "Vor- und Nachname" : "Full name"} *</span><input name="customerName" autoComplete="name" required minLength={2}/></label><label><span>E-Mail *</span><input name="customerEmail" type="email" autoComplete="email" required/></label><label><span>{de ? "Telefon" : "Phone"}</span><input name="customerPhone" autoComplete="tel"/></label><label><span>{de ? "Unternehmen" : "Company"}</span><input name="company" autoComplete="organization"/></label></div></fieldset>
     <fieldset disabled={busy}><legend><span>03</span>{de ? "Fahrzeug" : "Vehicle"}</legend><div className="form-grid"><label className="wide"><span>{de ? "FIN / Fahrgestellnummer" : "VIN"} *</span><input name="vin" minLength={17} maxLength={20} autoCapitalize="characters" spellCheck={false} placeholder="WVWZZZ1JZ3W386752" required/></label><label><span>{de ? "Hersteller" : "Make"}</span><input name="make" placeholder="Volkswagen"/></label><label><span>{de ? "Modell" : "Model"}</span><input name="model" placeholder="Golf"/></label><label><span>{de ? "Erstzulassung" : "First registration"}</span><input name="firstRegistration" type="date"/></label><label><span>{de ? "Herkunfts- oder Zielland" : "Origin or destination country"}</span><input name="originCountry" placeholder={de ? "z. B. Italien" : "e.g. Italy"}/></label><label className="wide"><span>{de ? "Fundstelle der eingeschlagenen FIN" : "Location of stamped VIN"} *</span><input name="vinLocation" placeholder={de ? "z. B. Motorraum rechts" : "e.g. engine bay, right side"} required/></label><label className="wide"><span>{de ? "Hinweise" : "Notes"}</span><textarea name="notes" rows={3} maxLength={2000} placeholder={de ? "Import nach Deutschland oder Zulassung im EU-Ausland? Besondere Frist oder Rückfrage?" : "Import into Germany or registration in another EU country? Deadline or special question?"}/></label></div></fieldset>
     <fieldset disabled={busy}><legend><span>04</span>{de ? "Pflichtnachweise" : "Required evidence"}</legend><div className="upload-grid"><label className="upload-card"><Icon name="upload"/><b>{de ? "Ausländischer Fahrzeugschein" : "Foreign registration"} *</b><small>PDF, JPG, PNG</small><input name="foreignRegistrationDocument" type="file" accept="application/pdf,image/jpeg,image/png" required/></label><label className="upload-card"><Icon name="upload"/><b>{de ? "Fahrzeugfoto" : "Vehicle photo"} *</b><small>JPG, PNG</small><input name="vehiclePhoto" type="file" accept="image/jpeg,image/png" required/></label><label className="upload-card"><Icon name="upload"/><b>{de ? "Eingeschlagene FIN" : "Stamped VIN"} *</b><small>JPG, PNG</small><input name="stampedVinPhoto" type="file" accept="image/jpeg,image/png" required/></label></div></fieldset>

@@ -194,6 +194,7 @@ p { text-wrap: pretty; }
 .order-form legend span { display: grid; width: 27px; height: 27px; place-items: center; border-radius: 50%; background: var(--surface-2); font: 9px "Cascadia Mono", Consolas, monospace; }
 .service-options { display: grid; gap: 10px; }
 .service-option { position: relative; display: grid !important; grid-template-columns: auto 1fr auto; align-items: center; gap: 13px !important; padding: 17px; border: 1px solid var(--line); background: var(--bg); cursor: pointer; transition: border-color .2s, background .2s; }
+.service-option.single-product { cursor: default; }
 .service-option.selected { border-color: var(--brand); background: color-mix(in srgb, var(--brand) 7%, var(--surface)); }
 .service-option > input { width: 18px; height: 18px; padding: 0; accent-color: var(--brand); }
 .service-option > span { display: grid; gap: 4px; }
@@ -244,7 +245,7 @@ textarea { resize: vertical; }
 .example-preview > span { position: absolute; right: 12px; bottom: 12px; padding: 7px 9px; background: #10251f; color: var(--acid); font: 8px "Cascadia Mono", Consolas, monospace; letter-spacing: .08em; }
 .example-grid article > div { padding: 23px; }
 .example-grid small { color: var(--brand-2); font: 9px "Cascadia Mono", Consolas, monospace; letter-spacing: .1em; }
-.example-grid h3 { margin: 10px 0; font-size: 25px; letter-spacing: -.04em; }
+.example-grid h3 { margin: 10px 0; overflow-wrap: break-word; font-size: 25px; letter-spacing: -.04em; }
 .example-grid p { min-height: 68px; margin: 0 0 20px; color: var(--muted); font-size: 13px; line-height: 1.6; }
 .example-grid article > div > a { display: flex; align-items: center; justify-content: space-between; padding-top: 17px; border-top: 1px solid var(--line); font-size: 12px; font-weight: 750; }
 
