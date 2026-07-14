@@ -40,6 +40,13 @@ describe("order input", () => {
   it("only accepts a current EU Member State", () => {
     expect(orderInputSchema.safeParse({ ...validOrder, originCountry: "US" }).success).toBe(false);
   });
+
+  it("rejects common email domain typos with a useful correction", () => {
+    const result = orderInputSchema.safeParse({ ...validOrder, customerEmail: "erika@gmil.com" });
+
+    expect(result.success).toBe(false);
+    if (!result.success) expect(result.error.issues[0]?.message).toContain("erika@gmail.com");
+  });
 });
 
 describe("EU country options", () => {

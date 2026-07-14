@@ -12,6 +12,7 @@ Produktionsreifes Next.js-16-Portal der Autohaus Dörrschuck Handels GmbH für d
 - Auftragsanlage mit serverseitiger Validierung von FIN, Pflichtfeldern und Einwilligungsnachweisen
 - Magic-Byte-Prüfung und private Ablage von PDF/JPG/PNG in einem Railway Bucket
 - geschützter Auftragsstatus mit gehashtem, zufälligem Zugriffscode
+- transaktionale Kundenbestätigung und interne Auftragsbenachrichtigung per SMTP
 - optionaler Stripe Checkout mit signaturgeprüftem Webhook; manueller Zahlungsmodus als Fallback
 - serverseitig geschütztes Backoffice unter `/de/app` mit Statuspflege, Auditprotokoll und Ergebnis-Uploads
 - PostgreSQL/Drizzle-Migrationen, Healthcheck, Sicherheitsheader, Sitemap und strukturierte Daten
@@ -52,6 +53,10 @@ pnpm build
 | `PAYMENT_MODE` | `manual` oder `stripe` |
 | `STRIPE_SECRET_KEY` | optionaler Stripe-Schlüssel |
 | `STRIPE_WEBHOOK_SECRET` | optionales Webhook-Geheimnis |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_SECURE` | SMTP-Server für Transaktionsmails |
+| `SMTP_USER`, `SMTP_PASSWORD` | Zugangsdaten des Versandpostfachs |
+| `MAIL_FROM` | sichtbarer Absender der Auftragsmails |
+| `ORDER_NOTIFICATION_EMAIL` | Empfänger interner Auftragsbenachrichtigungen |
 
 ## Daten- und Sicherheitsmodell
 
