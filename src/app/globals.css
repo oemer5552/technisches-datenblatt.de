@@ -1,13 +1,16 @@
 :root {
-  --bg: #f4f6f8;
+  --bg: #e7ebf0;
   --surface: #ffffff;
-  --surface-2: #e9edf2;
-  --ink: #0d1117;
-  --muted: #5f6b7a;
-  --line: #d7dde5;
+  --surface-2: #f3f4f6;
+  --ink: #111827;
+  --muted: #4b5563;
+  --line: #d1d5db;
   --brand: #046bd2;
-  --brand-2: #0358ad;
-  --acid: #fcc333;
+  --brand-2: #035aa8;
+  --brand-hover: #035aa8;
+  --brand-dark: #2f2f2f;
+  --acid: #fccc33;
+  --acid-hover: #e6b82e;
   --danger: #b4232c;
   --shadow: 0 24px 60px rgba(13, 17, 23, .12);
   color-scheme: light;
@@ -20,9 +23,12 @@
   --ink: #e6edf3;
   --muted: #b1bac4;
   --line: #30363d;
-  --brand: #1683ed;
-  --brand-2: #58a6ff;
-  --acid: #fcc333;
+  --brand: #046bd2;
+  --brand-2: #3b82f6;
+  --brand-hover: #035aa8;
+  --brand-dark: #2f2f2f;
+  --acid: #fccc33;
+  --acid-hover: #e6b82e;
   --danger: #ff8f8f;
   --shadow: 0 25px 70px rgba(0, 0, 0, .35);
   color-scheme: dark;
@@ -31,7 +37,8 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --bg: #0d1117; --surface: #161b22; --surface-2: #21262d; --ink: #e6edf3; --muted: #b1bac4;
-    --line: #30363d; --brand: #1683ed; --brand-2: #58a6ff; --acid: #fcc333; --danger: #ff8f8f;
+    --line: #30363d; --brand: #046bd2; --brand-2: #3b82f6; --brand-hover: #035aa8;
+    --brand-dark: #2f2f2f; --acid: #fccc33; --acid-hover: #e6b82e; --danger: #ff8f8f;
     --shadow: 0 25px 70px rgba(0, 0, 0, .35); color-scheme: dark;
   }
 }
@@ -45,11 +52,11 @@ button, input, textarea, select { color: inherit; font: inherit; }
 button { cursor: pointer; }
 p { text-wrap: pretty; }
 
-.site-header { position: sticky; top: 0; z-index: 50; display: flex; height: 70px; align-items: center; justify-content: space-between; padding: 0 clamp(20px, 4vw, 70px); border-bottom: 1px solid color-mix(in srgb, var(--line) 75%, transparent); background: color-mix(in srgb, var(--bg) 91%, transparent); backdrop-filter: blur(20px); }
+.site-header { position: sticky; top: 0; z-index: 50; display: flex; height: 70px; align-items: center; justify-content: space-between; padding: 0 clamp(20px, 4vw, 70px); border-bottom: 1px solid color-mix(in srgb, var(--line) 75%, transparent); background: color-mix(in srgb, var(--surface-2) 94%, transparent); backdrop-filter: blur(20px); }
 .brand { display: inline-flex; align-items: center; gap: 11px; letter-spacing: -.035em; }
 .brand span { display: grid; width: 38px; height: 38px; place-items: center; border-radius: 8px; background: var(--acid); color: #0d1117; font-size: 12px; font-weight: 900; letter-spacing: -.04em; box-shadow: inset 0 -4px 0 var(--brand); }
 .brand b { font-size: 15px; }
-.brand.inverse span { background: #eaf0ec; color: #11201b; }
+.brand.inverse span { background: var(--acid); color: #0d1117; }
 .site-header nav { display: flex; align-items: center; gap: clamp(11px, 1.4vw, 22px); font-size: 12px; font-weight: 700; }
 .site-header nav > a:not(.button) { transition: color .2s; }
 .site-header nav > a:not(.button):hover { color: var(--brand-2); }
@@ -72,7 +79,7 @@ p { text-wrap: pretty; }
 .button.primary { background: var(--brand); color: #fff; }
 :root[data-theme="dark"] .button.primary { color: #fff; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .button.primary { color: #fff; } }
-.button.primary:hover { background: var(--brand-2); }
+.button.primary:hover { background: var(--brand-hover); }
 .button.ghost { border-color: var(--line); background: color-mix(in srgb, var(--surface) 52%, transparent); }
 .button.small { min-height: 39px; padding: 0 16px; font-size: 12px; }
 .kicker { display: inline-flex; align-items: center; gap: 9px; color: var(--brand-2); font-family: "Cascadia Mono", Consolas, monospace; font-size: 11px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
@@ -383,7 +390,7 @@ textarea { resize: vertical; }
 
 /* Compact Dörrschuck-inspired home page */
 .compact-home { overflow: hidden; }
-.compact-hero { min-height: 420px; grid-template-columns: minmax(0, 1.25fr) minmax(330px, .75fr); gap: clamp(30px, 5vw, 72px); padding: 28px clamp(24px, 6vw, 105px) 32px; background: #0d1117; color: #e6edf3; }
+.compact-hero { min-height: 420px; grid-template-columns: minmax(0, 1.25fr) minmax(330px, .75fr); gap: clamp(30px, 5vw, 72px); padding: 28px clamp(24px, 6vw, 105px) 32px; background: var(--brand-dark); color: #ffffff; }
 .compact-hero::before { top: -65%; right: -16%; border-color: #30363d; }
 .compact-hero::after { top: -34%; right: -2%; border-color: #30363d; }
 .compact-hero .kicker { color: var(--acid); }
@@ -391,6 +398,8 @@ textarea { resize: vertical; }
 .compact-hero h1 em { color: var(--acid); font-family: inherit; font-style: normal; font-weight: 700; }
 .compact-hero .hero-copy > p { max-width: 680px; color: #b1bac4; font-size: clamp(16px, 1.35vw, 19px); line-height: 1.55; }
 .compact-hero .button-row { margin: 18px 0 0; }
+.compact-hero .button.primary { background: var(--acid); color: #111827; }
+.compact-hero .button.primary:hover { background: var(--acid-hover); }
 .compact-cta { align-items: center; }
 .compact-cta > a:not(.button) { display: inline-flex; align-items: center; gap: 7px; color: var(--acid); font-size: 12px; font-weight: 800; }
 .compact-hero .button.ghost { border-color: #484f58; background: transparent; }
@@ -398,7 +407,7 @@ textarea { resize: vertical; }
 .compact-hero .trust svg { color: var(--acid); }
 .hero-offer { position: relative; z-index: 2; padding: 18px; border: 1px solid #30363d; border-top: 4px solid var(--acid); border-radius: 10px; background: #161b22; box-shadow: 0 24px 60px rgba(0,0,0,.3); }
 .offer-label { display: flex; align-items: center; justify-content: space-between; gap: 20px; color: #b1bac4; font-size: 11px; }
-.offer-label b { padding: 5px 8px; border-radius: 5px; background: color-mix(in srgb, var(--brand) 22%, #161b22); color: #58a6ff; font: 9px "Cascadia Mono", Consolas, monospace; letter-spacing: .08em; }
+.offer-label b { padding: 5px 8px; border-radius: 5px; background: color-mix(in srgb, var(--brand) 22%, #161b22); color: var(--brand-2); font: 9px "Cascadia Mono", Consolas, monospace; letter-spacing: .08em; }
 .hero-offer > strong { display: block; margin-top: 13px; color: var(--acid); font-size: clamp(46px, 4.4vw, 62px); letter-spacing: -.07em; line-height: .9; }
 .hero-offer > small { color: #8b949e; font-size: 11px; }
 .hero-offer > ul { display: grid; gap: 6px; margin: 13px 0; padding: 12px 0; border-block: 1px solid #30363d; list-style: none; font-size: 11px; font-weight: 650; }

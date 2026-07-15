@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image" },
 };
 
-export const viewport: Viewport = { colorScheme: "light dark", themeColor: [{ media: "(prefers-color-scheme: light)", color: "#f2f0e9" }, { media: "(prefers-color-scheme: dark)", color: "#0b100f" }] };
+export const viewport: Viewport = { colorScheme: "light dark", themeColor: [{ media: "(prefers-color-scheme: light)", color: "#e7ebf0" }, { media: "(prefers-color-scheme: dark)", color: "#0d1117" }] };
 
 const themeScript = `(function(){try{var t=localStorage.getItem('td-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}})()`;
 
