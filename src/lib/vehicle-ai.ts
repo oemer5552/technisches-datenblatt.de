@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { hasExactApprovalNumber } from "./vehicle-rules";
 
 export const VEHICLE_FIELDS = [
   "briefquelle", "briefnr", "kz_land", "kennzeichen", "vin", "ez", "marke", "typ", "variante",
@@ -94,9 +95,11 @@ export async function extractVehicleData(files: EvidenceInput[]) {
       text: [
         "Lies das eingereichte Fahrzeug-Zulassungsdokument, das Fahrzeug-Außenfoto und das Foto der eingeschlagenen FIN aus.",
         "Übertrage ausschließlich Werte, die sichtbar in den Unterlagen stehen. Erfinde keine technischen Daten und leite keine fehlenden Typspezifikationen aus Modellwissen ab.",
+        "Feld K muss Zeichen für Zeichen einschließlich des tatsächlichen TAN-Erweiterungsstands (*NN) aus dem Originaldokument übernommen werden. Leite den Erweiterungsstand niemals aus Erstzulassung, VIN, Modelljahr oder Typwissen ab; bei Unleserlichkeit ist K null.",
         "Nutze das Außenfoto ausschließlich für die sichtbare Grundfarbe und gegebenenfalls das Kennzeichen. Standardisiere farbe auf SCHWARZ, WEISS, GRAU, SILBER, BLAU, ROT, GRUEN, BRAUN, GELB, ORANGE, VIOLETT, BEIGE, MEHRFARBIG oder UNBEKANNT; beschreibe den sichtbaren Ton in farbbeschreibung.",
         "Nutze das FIN-Foto für einen Zeichen-für-Zeichen-Abgleich. vin_ort darf nur beschrieben werden, wenn die Einbaustelle aus dem Foto erkennbar ist.",
         "Zahlenfelder ohne Einheit ausgeben, Datumswerte möglichst als TT.MM.JJJJ. Reifen vollständig und zeilenweise ausgeben. Nicht vorhandene oder unleserliche Werte sind null.",
+        "Getriebe, Antrieb, Sitze, Emissionscode, Reifen, Genehmigungsdatum und technische Massen nur übernehmen, wenn der jeweilige Wert in den eingereichten Nachweisen sichtbar ist. Keine Standardwerte einsetzen.",
         "Melde Widersprüche, abgeschnittene Felder, Unschärfe und unsichere Zeichen in reviewReasons. sourceNotes nennt knapp, aus welcher Quelle relevante Werte stammen.",
       ].join("\n"),
     },
@@ -152,6 +155,6 @@ export function assessVehicleExtraction(extraction: VehicleExtraction, submitted
   if (extraction.criticalConfidence.vin < 0.9) reasons.push("FIN-Abgleich benötigt eine manuelle Sichtprüfung.");
   if (extraction.criticalConfidence.color < 0.65) reasons.push("Fahrzeugfarbe ist auf dem Außenfoto nicht eindeutig erkennbar.");
   if (!extraction.fields.marke) reasons.push("Fabrikmarke fehlt oder ist nicht lesbar.");
-  if (!extraction.fields.K) reasons.push("EG-Typgenehmigungsnummer fehlt oder ist nicht lesbar.");
+  if (!hasExactApprovalNumber(extraction.fields.K)) reasons.push("EG-Typgenehmigungsnummer einschließlich TAN-Erweiterungsstand fehlt oder ist nicht vollständig lesbar.");
   return [...new Set(reasons)];
 }

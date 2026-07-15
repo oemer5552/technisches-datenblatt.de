@@ -9,6 +9,7 @@ import { documents, orderEvents, orders } from "@/db/schema";
 import { AI_RESULT_KINDS, EVIDENCE_KINDS } from "./site";
 import { deletePrivateObject, getPrivateObject, putPrivateObject } from "./storage";
 import { assessVehicleExtraction, extractVehicleData, vehicleAiConfigured, type VehicleExtraction } from "./vehicle-ai";
+import { colorCode, fuelCode, hasExactApprovalNumber } from "./vehicle-rules";
 
 const draftFiles = [
   { kind: "aiDraftCocResearch", filename: "coc-typgenehmigungsdaten-ki-entwurf.pdf", rendered: "coc-typgenehmigungsdaten-entwurf.pdf" },
@@ -35,6 +36,8 @@ function rendererData(extraction: VehicleExtraction, order: typeof orders.$infer
     kz_land: extraction.fields.kz_land || order.originCountry || "EU",
     kennzeichen: extraction.fields.kennzeichen || "—",
     farbe: extraction.fields.farbe || "UNBEKANNT",
+    f11: colorCode(extraction.fields.farbe),
+    f10: fuelCode(extraction.fields.kraftstoff),
     aufbau: extraction.fields.aufbau || "— – —",
     reifen_liste: extraction.reifen_liste,
   };
@@ -54,7 +57,10 @@ async function renderDrafts(data: Record<string, unknown>) {
       child.on("close", (code) => code === 0 ? resolve() : reject(new Error(`PDF_RENDER_${code}_${stderr.slice(-200)}`)));
       child.stdin.end(JSON.stringify(data));
     });
-    return await Promise.all(draftFiles.map(async (file) => ({ ...file, buffer: await readFile(path.join(directory, file.rendered)) })));
+    return await Promise.all(draftFiles.map(async (file) => ({
+      ...file,
+      buffer: await readFile(path.join(/* turbopackIgnore: true */ directory, file.rendered)),
+    })));
   } finally {
     const resolved = path.resolve(directory);
     if (resolved.startsWith(path.resolve(tmpdir()) + path.sep)) await rm(resolved, { recursive: true, force: true });
@@ -95,6 +101,17 @@ export async function processOrderWithAi(orderId: string) {
     })));
     const { model, extraction } = await extractVehicleData(evidence);
     const reviewReasons = assessVehicleExtraction(extraction, { vin: order.vin, firstRegistration: order.firstRegistration || "" });
+    if (!hasExactApprovalNumber(extraction.fields.K)) {
+      await getDb().transaction(async (tx) => {
+        await tx.update(orders).set({ status: "rueckfrage", updatedAt: new Date() }).where(eq(orders.id, orderId));
+        await tx.insert(orderEvents).values({
+          id: randomUUID(), orderId, actor: "ai", action: "ai.processing.needs_input",
+          detail: { model, code: "EXACT_APPROVAL_NUMBER_REQUIRED", reviewReasons, fields: extraction.fields },
+        });
+      });
+      console.warn("order_ai_needs_input", { orderId, code: "EXACT_APPROVAL_NUMBER_REQUIRED" });
+      return { state: "needs_input" as const, code: "EXACT_APPROVAL_NUMBER_REQUIRED", reviewReasons };
+    }
     const rendered = await renderDrafts(rendererData(extraction, order));
     const rows: Array<typeof documents.$inferInsert> = [];
     for (const file of rendered) {
